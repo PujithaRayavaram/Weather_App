@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>WeatherWave</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+        <div class="brand">
+
+            <span class="brand-icon">🌤️</span>
+
+            <div>
+                <h1>WeatherWave</h1>
+                <p>Smart weather dashboard</p>
+            </div>
+
+        </div>
+
+
+        <button id="themeButton"
+                class="theme-button">
+
+            🌙
+
+        </button>
+
+    </header>
+
+
+
+    <!-- SEARCH -->
+
+    <section class="search-section">
+
+        <div class="search-box">
+
+            <span>🔍</span>
+
+            <input
+                id="cityInput"
+                type="text"
+                placeholder="Search city..."
+                autocomplete="off"
+            >
+
+            <button id="searchButton">
+                Search
+            </button>
+
+        </div>
+
+        <p class="search-hint">
+            Try Hyderabad, Mumbai, Delhi or London
+        </p>
+
+    </section>
+
+
+
+    <!-- LOADING -->
+
+    <div id="loading"
+         class="loading hidden">
+
+        <div class="loader"></div>
+
+        <p>Getting latest weather...</p>
+
+    </div>
+
+
+
+    <!-- ERROR -->
+
+    <div id="errorBox"
+         class="error-box hidden">
+
+        <span>⚠️</span>
+
+        <span id="errorMessage"></span>
+
+    </div>
+
+
+
+    <!-- WEATHER -->
+
+    <main id="weatherDashboard"
+          class="hidden">
+
+
+        <!-- LOCATION -->
+
+        <section class="location-section">
+
+            <div>
+
+                <h2 id="cityName">
+                    Hyderabad
+                </h2>
+
+                <p id="countryName">
+                    India
+                </p>
+
+            </div>
+
+
+            <div class="current-time">
+
+                <span>Local time</span>
+
+                <strong id="localTime">
+                    --
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CURRENT WEATHER -->
+
+        <section class="current-card">
+
+
+            <div class="current-left">
+
+                <div class="big-weather-icon"
+                     id="weatherIcon">
+
+                    ☀️
+
+                </div>
+
+
+                <div>
+
+                    <div class="temperature">
+
+                        <span id="temperature">
+                            --
+                        </span>
+
+                        <span>°C</span>
+
+                    </div>
+
+
+                    <h3 id="weatherDescription">
+                        Clear Sky
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div class="current-right">
+
+                <p>
+                    Feels like
+                </p>
+
+                <strong id="feelsLike">
+                    --°C
+                </strong>
+
+
+                <p class="updated">
+
+                    Updated now
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- HOURLY -->
+
+        <section class="weather-section">
+
+
+            <div class="section-title">
+
+                <h2>
+                    Hourly Forecast
+                </h2>
+
+                <span>
+                    🕐
+                </span>
+
+            </div>
+
+
+            <div id="hourlyContainer"
+                 class="hourly-container">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- DAILY -->
+
+        <section class="weather-section">
+
+
+            <div class="section-title">
+
+                <h2>
+                    7-Day Forecast
+                </h2>
+
+                <span>
+                    📅
+                </span>
+
+            </div>
+
+
+            <div id="forecastContainer"
+                 class="daily-container">
+
+            </div>
+
+        </section>
+
+
+
+        <!-- DETAILS -->
+
+        <!-- WEATHER DETAILS -->
+
+<section class="detail-panels">
+
+
+    <!-- PRECIPITATION -->
+
+    <!-- PRECIPITATION -->
+
+<div class="detail-panel">
+
+    <button class="detail-header"
+            onclick="togglePanel('precipitationPanel')">
+
+        <div class="detail-title">
+
+            <div class="detail-icon">
+                🌧️
+            </div>
+
+            <div>
+
+                <strong>
+                    Precipitation
+                </strong>
+
+                <span id="precipSummary">
+                    · --
+                </span>
+
+            </div>
+
+        </div>
+
+        <span class="arrow">
+            ▼
+        </span>
+
+    </button>
+
+
+    <div id="precipitationPanel"
+         class="detail-content">
+
+        <p class="detail-description">
+            Precipitation probability and expected
+            precipitation for the coming hours.
+        </p>
+
+
+        <div class="detail-highlight">
+
+            <span>
+                Tonight's amount
+            </span>
+
+            <strong id="precipTotal">
+                -- mm
+            </strong>
+
+        </div>
+
+
+        <div id="precipHourly"
+             class="mini-chart">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <!-- WIND -->
+
+    <div class="detail-panel">
+
+        <button class="detail-header"
+                onclick="togglePanel('windPanel')">
+
+            <div class="detail-title">
+
+                <div class="detail-icon">
+                    💨
+                </div>
+
+                <div>
+
+                    <strong>
+                        Wind
+                    </strong>
+
+                    <span id="windSummary">
+                        · --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <span class="arrow"
+                  id="windArrow">
+                ▼
+            </span>
+
+        </button>
+
+
+        <div id="windPanel"
+             class="detail-content">
+
+            <p class="detail-description">
+                Wind speed and direction over the
+                upcoming hours.
+            </p>
+
+
+            <div class="detail-highlight">
+
+                <span>
+                    Today's maximum
+                </span>
+
+                <strong id="windMaximum">
+                    -- km/h
+                </strong>
+
+            </div>
+
+
+            <div id="windHourly"
+                 class="mini-chart">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- HUMIDITY -->
+
+    <div class="detail-panel">
+
+        <button class="detail-header"
+                onclick="togglePanel('humidityPanel')">
+
+            <div class="detail-title">
+
+                <div class="detail-icon">
+                    💧
+                </div>
+
+                <div>
+
+                    <strong>
+                        Humidity
+                    </strong>
+
+                    <span id="humiditySummary">
+                        · --
+                    </span>
+
+                </div>
+
+            </div>
+
+            <span class="arrow"
+                  id="humidityArrow">
+                ▼
+            </span>
+
+        </button>
+
+
+        <div id="humidityPanel"
+             class="detail-content">
+
+            <p class="detail-description">
+                Relative humidity represents the amount
+                of moisture in the air.
+            </p>
+
+
+            <div class="detail-highlight">
+
+                <span>
+                    Today's average
+                </span>
+
+                <strong id="humidityAverage">
+                    --%
+                </strong>
+
+            </div>
+
+
+            <div id="humidityHourly"
+                 class="mini-chart">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- AIR QUALITY -->
+
+    <div class="detail-panel">
+
+        <button class="detail-header"
+                onclick="togglePanel('airPanel')">
+
+            <div class="detail-title">
+
+                <div class="detail-icon">
+                    🌫️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Air Quality
+                    </strong>
+
+                    <span id="airSummary">
+                        · Loading...
+                    </span>
+
+                </div>
+
+            </div>
+
+            <span class="arrow"
+                  id="airArrow">
+                ▼
+            </span>
+
+        </button>
+
+
+        <div id="airPanel"
+             class="detail-content">
+
+            <div class="air-main">
+
+                <div class="aqi-number"
+                     id="aqiNumber">
+                    --
+                </div>
+
+                <div>
+
+                    <h3 id="aqiStatus">
+                        Air quality
+                    </h3>
+
+                    <p>
+                        Air Quality Index
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="aqi-scale">
+
+                <div class="scale-bar"></div>
+
+                <div class="scale-labels">
+
+                    <span>0</span>
+                    <span>50</span>
+                    <span>100</span>
+                    <span>150</span>
+                    <span>200</span>
+                    <span>300+</span>
+
+                </div>
+
+            </div>
+
+
+            <div class="pollutants">
+
+                <div>
+                    <span>PM2.5</span>
+                    <strong id="pm25">--</strong>
+                </div>
+
+                <div>
+                    <span>PM10</span>
+                    <strong id="pm10">--</strong>
+                </div>
+
+                <div>
+                    <span>NO₂</span>
+                    <strong id="no2">--</strong>
+                </div>
+
+                <div>
+                    <span>O₃</span>
+                    <strong id="o3">--</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+        <!-- SUN -->
+
+        <section class="sun-section">
+
+
+            <div class="sun-card">
+
+                <div class="sun-icon">
+                    🌅
+                </div>
+
+                <div>
+
+                    <span>
+                        Sunrise
+                    </span>
+
+                    <strong id="sunrise">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="sun-card">
+
+                <div class="sun-icon">
+                    🌇
+                </div>
+
+                <div>
+
+                    <span>
+                        Sunset
+                    </span>
+
+                    <strong id="sunset">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- AIR QUALITY -->
+
+        <section class="air-quality-card">
+
+            <div class="air-icon">
+                🌫️
+            </div>
+
+
+            <div class="air-content">
+
+                <div>
+
+                    <span>
+                        Air Quality
+                    </span>
+
+                    <h3>
+                        Coming next
+                    </h3>
+
+                </div>
+
+
+                <div class="air-badge">
+                    AQI
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            WeatherWave © 2026
+        </p>
+
+        <span>
+            Weather data powered by Open-Meteo
+        </span>
+
+    </footer>
+
+
+</div>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
